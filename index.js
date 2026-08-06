@@ -12,7 +12,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const {
   BOT_TOKEN,
   GUILD_ID,
-  WEBSITE_URL = 'https://sentinal-totk.onrender.com/api/health',
+  WEBSITE_URL = 'https://exedevelopement.com/',
   CHECK_INTERVAL_MINUTES = '2',
   REQUEST_TIMEOUT_MS = '10000',
   PORT = '3000', // Render injects its own PORT env var automatically, this is just a local fallback
