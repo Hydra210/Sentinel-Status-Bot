@@ -6,14 +6,16 @@
 // ============================================================
 
 require('dotenv').config();
+const http = require('http');
 const { Client, GatewayIntentBits } = require('discord.js');
 
 const {
   BOT_TOKEN,
   GUILD_ID,
-  WEBSITE_URL = 'https://exedevelopement.com/',
+  WEBSITE_URL = 'https://sentinal-totk.onrender.com/api/health',
   CHECK_INTERVAL_MINUTES = '2',
   REQUEST_TIMEOUT_MS = '10000',
+  PORT = '3000', // Render injects its own PORT env var automatically, this is just a local fallback
 } = process.env;
 
 if (!BOT_TOKEN || !GUILD_ID) {
@@ -26,8 +28,28 @@ const client = new Client({
 });
 
 let lastKnownState = null; // null = unknown yet, true = up, false = down
+let lastCheckedAt = null;
+
+// ---------------------------------------------
+// Dummy HTTP server — Render's free Web Service tier requires something
+// bound to a port or it'll sit there "deploying" forever and eventually
+// cycle the service. This does nothing except exist so that check passes.
+// The actual website-checking logic below is completely separate from this.
+// ---------------------------------------------
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({
+    botStatus: client.isReady() ? 'online' : 'starting',
+    monitoring: WEBSITE_URL,
+    lastKnownState: lastKnownState === null ? 'unknown' : (lastKnownState ? 'up' : 'down'),
+    lastCheckedAt,
+  }));
+}).listen(PORT, () => {
+  console.log(`[dummy-server] listening on port ${PORT} (just here to keep Render happy)`);
+});
 
 async function checkWebsite() {
+  lastCheckedAt = new Date().toISOString();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), Number(REQUEST_TIMEOUT_MS));
 
