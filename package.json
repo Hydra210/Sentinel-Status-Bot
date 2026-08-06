@@ -1,0 +1,16 @@
+{
+  "name": "website-status-bot",
+  "version": "1.0.0",
+  "description": "Discord bot that pings a website and reflects its up/down status via presence + nickname.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "dotenv": "^16.4.5"
+  }
+}
