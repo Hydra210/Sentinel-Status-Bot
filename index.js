@@ -68,11 +68,11 @@ async function updateStatus(isUp, httpStatus, errorMsg) {
   try {
     if (isUp) {
       await client.user.setPresence({ status: 'online' });
-      await guild.members.me.setNickname('Website Up');
+      await guild.members.me.setNickname('Sentinel: Online');
       console.log(`[check] UP (HTTP ${httpStatus}) — presence set to online`);
     } else {
       await client.user.setPresence({ status: 'dnd' });
-      await guild.members.me.setNickname('Website Down');
+      await guild.members.me.setNickname('Sentinel: Offline');
       console.log(`[check] DOWN${errorMsg ? ` (${errorMsg})` : ` (HTTP ${httpStatus})`} — presence set to dnd`);
     }
   } catch (err) {
